@@ -4,6 +4,9 @@ var request = require("request");
 var SpotifyWebapi = require('node-spotify-api');
 var fs = require("fs")
 var inquirer = require('inquirer');
+//store command of array
+var nodeArgv = process.argv;
+var command = process.argv[2];
 
 
 
@@ -28,25 +31,21 @@ var inquirer = require('inquirer');
     access_token_secret: 'imXEGnwyrRpAZe3EWpLCvijNKJ4NWsNkl8oylBhjRvggH',
   });
 
-  var params = {screen_name: "rainyhoang", count:'1'};
-
-  //var params = {screen_name: 'nodejs'};
+  var params = {screen_name: "rainyhoang", count:'20'};
 
   client.get('statuses/user_timeline', params, function(error, tweets, response) {
       if (!error) {
-        // console.log(tweets);
+        for(var i = 0; i<tweets.length; i++){
+          var date = tweets[i].created_at;
+                 console.log("Rain Hoang: " + tweets[i].text + " Created At: " + date.substring(0, 19));
+                 console.log("-----------------------");
+        }
       }
-      console.log(tweets.text)
+      // console.log(tweets.text)
 
   });
 
   // end of twitterKeys
-
-// end of twitterKeys
-
-//OBDM
-
-
 
 // Spotify
 
@@ -67,9 +66,7 @@ fs.readFile("random.txt", "utf8", function(data, error) {
   secret: "263061cdddbc412eadba1822e3ca5f23"
   });
 
-  spotify.search({ type: 'artist OR album OR track', query: data[4] }, function(err, data) {
-
-    // switch
+  spotify.search({ type: 'artist OR album OR track', query: "I want it that way" }, function(err, data) {
 
     if (err) {
     return console.log('Error occurred: ' + err);
