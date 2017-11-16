@@ -1,4 +1,4 @@
-var stuffINeed = require("./key.js");
+var stuffIneed = require("./key.js");
 var twitter = require("twitter");
 var request = require("request");
 var Spotify = require('node-spotify-api');
@@ -10,8 +10,7 @@ var nodeArgs = process.argv;
 
 var a = "";
 
-// Loop through all the words in the node argument
-// And do a little for-loop magic to handle the inclusion of "+"s
+
 for (var i = 3; i < nodeArgs.length; i++) {
 
   if (i > 3 && i < nodeArgs.length) {
@@ -22,7 +21,7 @@ for (var i = 3; i < nodeArgs.length; i++) {
   }
 }
 
-
+//=========================SWITCH=========================
 
 switch(action){
   case "my-tweets":tweet();
@@ -32,20 +31,19 @@ switch(action){
     if(a){
       spotifySong(a);
     } else{
-      spotifySong("Ace of Base");
+      spotifySong("The Sign");
     }
   break;
 
   case "movie-this":
     if(a){
-      omdbData(a)
+      OmdbData(a);
     } else{
-      omdbData("Mr. Nobody")
+      OmdbData("Mr. Nobody")
     }
   break;
 
-  case "do-what-it-says":
-    dootherthings();
+  case "do-what-it-says":dootherthings();
   break;
 
   default:
@@ -76,14 +74,18 @@ switch(action){
   });
 
 function tweet(){
-    var params = {screen_name: "rainyhoang", count:'20'};
+    var params = {screen_name: "rainyhoang", count: 20};
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
         if (!error) {
           for(var i = 0; i<tweets.length; i++){
             var date = tweets[i].created_at;
                    console.log("Rain Hoang: " + tweets[i].text + " Created At: " + date.substring(0, 19));
                    console.log("-----------------------");
+
           }
+        }
+        else {
+          console.log(error)
         }
 
     });
@@ -111,18 +113,12 @@ function spotifySong(song){
             console.log("Album: " + songData.album.name);
             console.log("-----------------------");
 
-            //adds text to log.txt
-            fs.appendFile('log.txt', songData.artists[0].name);
-            fs.appendFile('log.txt', songData.name);
-            fs.appendFile('log.txt', songData.preview_url);
-            fs.appendFile('log.txt', songData.album.name);
-            fs.appendFile('log.txt', "-----------------------");
           }
         } else{
-          console.log('Error occurred.');
+          console.log(error);
         }
       });
-}
+};
 
 
 //============================OMDB========================================
@@ -142,7 +138,7 @@ function OmdbData(movie){
       console.log("Actors: " + body.Actors);
 
     } else{
-      console.log('Error occurred.')
+      console.log(error)
     }
     if(movie === "Mr. Nobody"){
       console.log("-----------------------");
@@ -151,21 +147,21 @@ function OmdbData(movie){
 
     }
   });
-}
+};
 //===============READ THE TEXT FILE========================================
 
 function dootherthings(){
-fs.readFile("random.txt", "utf8", function(data, error) {
+    fs.readFile("random.txt", "utf8", function(data, error) {
 
-      if (error) {
-        return console.log(error);
-      }
+          if (error) {
+            return console.log(error);
+          }
 
-      var dataArr = data.split(",");
-      spotifySong(data[1]);
-      console.log(dataArr);
-})
-}
+          var dataArr = data.split(",");
+          spotifySong(data[1]);
+          console.log(dataArr);
+    })
+    };
 
 // // //insert API key of Spotify
 
